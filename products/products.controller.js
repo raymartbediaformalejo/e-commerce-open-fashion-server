@@ -1,11 +1,7 @@
-import { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
-import { Products } from "./products.services";
+import { Products } from "./products.services.js";
 
-export const getProducts = async (
-  request: Request,
-  response: Response
-): Promise<Response> => {
+export const getProducts = async (request, response) => {
   try {
     const data = await Products.getProducts();
     return response.status(200).send({ data, ok: true });
@@ -17,10 +13,7 @@ export const getProducts = async (
   }
 };
 
-export const getProduct = async (
-  request: Request,
-  response: Response
-): Promise<Response> => {
+export const getProduct = async (request, response) => {
   const { productID } = request.params;
   try {
     const data = await Products.getProduct(+productID);
@@ -33,10 +26,7 @@ export const getProduct = async (
   }
 };
 
-export const createProduct = async (
-  request: Request,
-  response: Response
-): Promise<Response> => {
+export const createProduct = async (request, response) => {
   try {
     const {
       title,
