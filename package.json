@@ -4,10 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon ./src/index.ts",
-    "migration:generate": "pnpm drizzle-kit generate:mysql",
-    "migration:push": "pnpm drizzle-kit push:mysql"
+    "start": "node server",
+    "dev": "nodemon ./src/index.ts"
   },
   "author": "",
   "license": "ISC",
