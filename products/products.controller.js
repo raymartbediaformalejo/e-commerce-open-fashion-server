@@ -29,9 +29,9 @@ export const getProducts = async (request, response) => {
 };
 
 export const getProduct = async (request, response) => {
-  const { productID } = request.params;
+  const { id } = request.params;
   try {
-    const data = await Products.getProduct(+productID);
+    const data = await Products.getProduct(id);
     return response.status(200).send({ data, ok: true });
   } catch (error) {
     console.log("Error Product Controller", error);
