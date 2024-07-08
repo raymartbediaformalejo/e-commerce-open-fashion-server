@@ -3,6 +3,8 @@ import { Products } from "./products.services.js";
 import { db } from "../database/database.js";
 
 export const getProducts = async (request, response) => {
+  console.log("getProducts");
+
   try {
     const page = parseInt(request.query.page) - 1 || 0;
     const limit = parseInt(request.query.limit) || 5;
@@ -75,6 +77,44 @@ export const createProduct = async (request, response) => {
     return response.status(201).send({ message: "Created", ok: true });
   } catch (error) {
     console.log("Error Product Controller", error);
+    return response
+      .status(500)
+      .send({ message: "Internal Server Error", ok: false });
+  }
+};
+
+export const searchProduct = async (request, response) => {
+  console.log("searchProduct");
+
+  try {
+    const page = parseInt(request.query.page) - 1 || 0;
+    const limit = parseInt(request.query.limit) || 5;
+    const offset = page * limit;
+    const query = request.query.q || "";
+    console.log("++++++++++++++++++++++++");
+    console.log(query);
+    console.log("++++++++++++++++++++++++");
+    const { data: products, error: productsError } = await db
+      .from("tblProducts")
+      .select()
+      .ilike("title", `%${query}%`)
+      .range(offset, offset + limit - 1);
+    if (productsError) throw productsError;
+
+    const { count: total } = await db
+      .from("tblProducts")
+      .select("*", { count: "exact" })
+      .ilike("title", `%${query}%`);
+
+    const res = {
+      total,
+      products,
+      page: page + 1,
+      limit,
+    };
+    return response.status(200).json(res);
+  } catch (error) {
+    console.log("Error Products Controller", error);
     return response
       .status(500)
       .send({ message: "Internal Server Error", ok: false });
