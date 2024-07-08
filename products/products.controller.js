@@ -1,10 +1,25 @@
 import { v4 as uuidv4 } from "uuid";
 import { Products } from "./products.services.js";
+import { db } from "../database/database.js";
 
 export const getProducts = async (request, response) => {
   try {
-    const data = await Products.getProducts();
-    return response.status(200).send({ data, ok: true });
+    const page = parseInt(request.query.page) - 1 || 0;
+    const limit = parseInt(request.query.limit) || 5;
+    const offset = page * limit;
+    const { data: products, error: productsError } = await db
+      .from("tblProducts")
+      .select()
+      .range(offset, offset + limit - 1);
+    if (productsError) throw productsError;
+    const total = products.length;
+    const res = {
+      total,
+      products,
+      page: page + 1,
+      limit,
+    };
+    return response.status(200).json(res);
   } catch (error) {
     console.log("Error Products Controller", error);
     return response
