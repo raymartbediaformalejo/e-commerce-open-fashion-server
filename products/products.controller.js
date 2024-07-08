@@ -32,7 +32,7 @@ export const getProduct = async (request, response) => {
   const { id } = request.params;
   try {
     const data = await Products.getProduct(id);
-    return response.status(200).send({ data, ok: true });
+    return response.status(200).json(data);
   } catch (error) {
     console.log("Error Product Controller", error);
     return response
