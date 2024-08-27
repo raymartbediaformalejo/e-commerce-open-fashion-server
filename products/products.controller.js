@@ -91,9 +91,6 @@ export const searchProduct = async (request, response) => {
     const limit = parseInt(request.query.limit) || 5;
     const offset = page * limit;
     const query = request.query.q || "";
-    console.log("++++++++++++++++++++++++");
-    console.log(query);
-    console.log("++++++++++++++++++++++++");
     const { data: products, error: productsError } = await db
       .from("tblProducts")
       .select()
